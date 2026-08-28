@@ -1,0 +1,44 @@
+#+TITLE: native-treesitter layer
+#+AUTHOR: Data Mike
+#+EMAIL: mjp35@cornell.edu
+#+TAGS: layer|programming|tool
+
+# TOC links should be GitHub style anchors.
+* Table of Contents                                        :TOC_4_gh:noexport:
+- [[#description][Description]]
+  - [[#features][Features:]]
+  - [[#status][Status]]
+- [[#install][Install]]
+
+* Description
+
+This layer adds support for Emacs' native treesit functionality (Emacs 29+).
+
+It includes treesit-auto and treesit-fold for automatic language installation
+and code folding, respectively.
+
+Specific languages are supported by adding a post-init to their layers.
+
+Supported layers so far: c-c++, csharp, javascript, markdown, python
+
+** Features:
+  - Context-aware syntax highlighting
+  - Code folding
+  - Automatic treesitter language installation
+
+** Status
+
+This layer is in early development. Support is neither comprehensive nor
+complete yet.
+
+* Install
+
+Add this layer to your =~/.emacs.d/private/= directory. For example, using git:
+
+#+BEGIN_SRC shell
+  git clone https://github.com/mprentice/spacemacs-native-treesitter.git ~/.emacs.d/private/native-treesitter
+#+END_SRC
+
+To use this configuration layer, add it to your =~/.spacemacs=. You will need to
+add =native-treesitter= to the existing =dotspacemacs-configuration-layers= list in this
+file.
