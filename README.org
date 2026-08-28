@@ -19,7 +19,7 @@ and code folding, respectively.
 
 Specific languages are supported by adding a post-init to their layers.
 
-Supported layers so far: c-c++, csharp, javascript, markdown, python
+Supported layers so far: csharp, markdown, python
 
 ** Features:
   - Context-aware syntax highlighting

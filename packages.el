@@ -1,4 +1,4 @@
-;;; packages.el --- native-treesitter layer packages file for Spacemacs.  -*- lexical-binding: t; -*-
+;;; packages.el --- native-treesitter layer packages file for Spacemacs.
 ;;
 ;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
@@ -44,9 +44,7 @@
   '(treesit-auto
     treesit-fold
     ;; Hook into the following layers when they load
-    c-c++
     csharp
-    javascript
     markdown
     python))
 
@@ -69,47 +67,15 @@
   (with-eval-after-load 'python
     (add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
     (add-hook 'python-ts-mode-hook #'treesit-fold-mode)
-    (add-hook 'python-ts-mode-hook #'spacemacs//python-setup-backend))
+    (add-hook 'python-ts-mode-hook #'spacemacs//python-setup-backend)
+    (add-hook 'python-ts-mode-hook #'native-treesitter//python-ts-mode-hook))
 
   (with-eval-after-load 'lsp-mode
     (lsp-dependency 'python '(:language-id "python"))
     (add-to-list 'lsp-language-id-configuration '(python-ts-mode . "python"))))
 
-;; --- JAVASCRIPT & TYPESCRIPT INTEGRATION ---
-(defun native-treesitter/post-init-javascript ()
-  (with-eval-after-load 'js
-    ;; Map standard JS/TS files to native tree-sitter major modes
-    (add-to-list 'auto-mode-alist '("\\.js\\'" . js-ts-mode))
-    (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
-    (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
-
-    ;; Enable folding and bridge formatting/LSP layers
-    (dolist (hook '(js-ts-mode-hook typescript-ts-mode-hook tsx-ts-mode-hook))
-      (add-hook hook #'treesit-fold-mode)
-      (add-hook hook #'spacemacs//javascript-setup-backend)))
-
-  (with-eval-after-load 'lsp-mode
-    (add-to-list 'lsp-language-id-configuration '(js-ts-mode . "javascript"))
-    (add-to-list 'lsp-language-id-configuration '(typescript-ts-mode . "typescript"))
-    (add-to-list 'lsp-language-id-configuration '(tsx-ts-mode . "typescriptreact"))))
-
-;; --- C & C++ INTEGRATION ---
-(defun native-treesitter/post-init-c-c++ ()
-  (with-eval-after-load 'cc-mode
-    ;; Map C/C++ files to native tree-sitter major modes
-    (add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
-    (add-to-list 'auto-mode-alist '("\\.h\\'" . c-ts-mode))
-    (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
-    (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-ts-mode))
-
-    ;; Enable folding and bridge formatting/LSP layers
-    (dolist (hook '(c-ts-mode-hook c++-ts-mode-hook))
-      (add-hook hook #'treesit-fold-mode)
-      (add-hook hook #'spacemacs//c-c++-setup-backend)))
-
-  (with-eval-after-load 'lsp-mode
-    (add-to-list 'lsp-language-id-configuration '(c-ts-mode . "c"))
-    (add-to-list 'lsp-language-id-configuration '(c++-ts-mode . "cpp"))))
+(defun native-treesitter//python-ts-mode-hook ()
+  (run-hooks 'python-mode-hook))
 
 ;; --- C# INTEGRATION ---
 (defun native-treesitter/post-init-csharp ()
@@ -119,10 +85,14 @@
 
     ;; Enable folding and bridge formatting/LSP layers
     (add-hook 'csharp-ts-mode-hook #'treesit-fold-mode)
-    (add-hook 'csharp-ts-mode-hook #'spacemacs//csharp-setup-backend))
+    (add-hook 'csharp-ts-mode-hook #'spacemacs//csharp-setup-backend)
+    (add-hook 'csharp-ts-mode-hook #'native-treesitter//csharp-ts-mode-hook))
 
   (with-eval-after-load 'lsp-mode
     (add-to-list 'lsp-language-id-configuration '(csharp-ts-mode . "csharp"))))
+
+(defun native-treesitter//csharp-ts-mode-hook ()
+  (run-hooks 'csharp-mode-hook))
 
 ;; --- MARKDOWN INTEGRATION ---
 (defun native-treesitter/post-init-markdown ()
@@ -134,7 +104,11 @@
     ;; Enable folding hooks and initialize Spacemacs backend routines
     (add-hook 'markdown-ts-mode-hook #'treesit-fold-mode)
     (add-hook 'markdown-ts-mode-hook #'spacemacs//markdown-setup-backend)
+    (add-hook 'markdown-ts-mode-hook #'native-treesitter//markdown-ts-mode-hook))
 
-    ;; Load Emacs 31 extensions (enables things like table of contents utilities)
-    (with-eval-after-load 'markdown-ts-mode
-      (require 'markdown-ts-mode-x))))
+  ;; Load Emacs 31 extensions (enables things like table of contents utilities)
+  (with-eval-after-load 'markdown-ts-mode
+    (require 'markdown-ts-mode-x)))
+
+(defun native-treesitter//markdown-ts-mode-hook ()
+  (run-hooks 'markdown-mode-hook))
