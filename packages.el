@@ -1,3 +1,5 @@
+;;   -*- lexical-binding: nil; -*-
+
 ;;; packages.el --- native-treesitter layer packages file for Spacemacs.
 ;;
 ;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
@@ -75,7 +77,15 @@
     (add-to-list 'lsp-language-id-configuration '(python-ts-mode . "python"))))
 
 (defun native-treesitter//python-ts-mode-hook ()
-  (run-hooks 'python-mode-hook))
+  (run-hooks 'python-mode-hook)
+  (when python-sort-imports-on-save
+    (add-hook 'before-save-hook #'native-treesitter//py-isort-before-save)))
+
+(defun native-treesitter//py-isort-before-save ()
+  (when (or (eq major-mode 'python-mode)
+            (eq major-mode 'python-ts-mode))
+    (condition-case err (py-isort-buffer)
+      (error (message "%s" (error-message-string err))))))
 
 ;; --- C# INTEGRATION ---
 (defun native-treesitter/post-init-csharp ()
