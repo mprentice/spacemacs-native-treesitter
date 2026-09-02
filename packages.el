@@ -52,9 +52,7 @@
 
 (defun native-treesitter/init-treesit-auto ()
   (use-package treesit-auto
-    :ensure t
-    :config
-    (global-treesit-auto-mode)))
+    :ensure t))
 
 (defun native-treesitter/init-treesit-fold ()
   (use-package treesit-fold
